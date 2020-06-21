@@ -22,8 +22,18 @@
 Проверить, чтобы все работало без ошибок в консоли */
 
 "use strict";
+let numberOfFilms;
 
-let numberOfFilms = prompt("Сколько фильмов вы уже посмотрели?", "");
+function start() {
+  do {
+    numberOfFilms = prompt("Сколько фильмов вы уже посмотрели?", "");
+  } while (
+    numberOfFilms == "" ||
+    numberOfFilms == null ||
+    isNaN(numberOfFilms)
+  );
+}
+//start();
 
 const personalMovieDB = {
   count: numberOfFilms,
@@ -33,12 +43,54 @@ const personalMovieDB = {
   private: false,
 };
 
-let lastFilm = prompt("Один из последних просмотренных фильмов?", "");
-let rating = prompt("На сколько оцените его?", "");
+function detectPersonalLevel() {
+  if (personalMovieDB.count < 10) {
+    alert("Просмотренно достаточно мало фильмов");
+  } else if (personalMovieDB.count > 10 && personalMovieDB.count < 40) {
+    alert("Просмотренно достаточно много фильмов");
+  } else if (personalMovieDB.count > 39) {
+    alert("Вы настоящий любитель фильмов");
+  } else {
+    alert("Произошла ошибка");
+  }
+}
+//detectPersonalLevel();
 
-const movies = {
-  [lastFilm]: rating,
-};
+const movies = {};
 
-console.log(personalMovieDB.count);
-console.log(movies);
+function rememberMyFilms() {
+  for (let i = 0; i < 2; i++) {
+    let lastFilm = "";
+    do {
+      lastFilm = prompt("Один из последних просмотренных фильмов?", "");
+    } while (lastFilm == null || lastFilm == "" || lastFilm.length > 50);
+    let rating = prompt("На сколько оцените его?", "");
+    if (rating == null || rating == "") {
+      rating = "Оценка не проставлена";
+    }
+    movies[lastFilm] = rating;
+  }
+}
+
+//rememberMyFilms();
+
+function showMyDB() {
+  if (personalMovieDB.private != true) {
+    console.log(personalMovieDB);
+  } else {
+    console.log("Защищенные данные");
+  }
+}
+
+function writeYourGenres() {
+  let genre = "";
+  for (let i = 0; i < 3; i++) {
+    while (genre == "" || genre.length > 20) {
+      genre = prompt(`Ваш любимый жанр №${i + 1}?`, "");
+    }
+    personalMovieDB.genres[i] = genre;
+    genre = "";
+  }
+}
+writeYourGenres();
+showMyDB();
